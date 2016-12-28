@@ -10,6 +10,8 @@ from os.path import dirname, abspath
 import six
 from math import *
 import random
+import transforms3d
+
 
 model_folder_path = dirname(dirname(abspath(__file__))) + '/examples/models/'
 
@@ -163,6 +165,26 @@ class tableScenario():
         dist_pt2_f = np.linalg.norm(point2 - point2_face)
         return dist_pt1_f, dist_pt2_f, dist_pt1_pt2
 
+def local_coordinates(point, com, orientation):
+    # print 'default orientation:', orientation
+    # print 'rotation matrix:', transforms3d.quaternions.quat2mat(orientation)
+    # print 'point:', point
+    # print 'com:', com
+    rotation_matrix = transforms3d.quaternions.quat2mat(orientation)
+    point_n = np.vstack([np.reshape(point,(3,1)),[1]])
+    com_n = np.reshape(com, (3,1))
+    T =  np.vstack([np.hstack([rotation_matrix, com_n]), np.reshape([0,0,0,1], (1,4))])
+    T_inv =  np.linalg.inv(T)
+    # print 'T_inv:', T_inv
+    # print np.dot(T_inv,point_n), np.dot(T, np.dot(T_inv,point_n))
+    return np.reshape(np.dot(T_inv,point_n), (4,))[:-1]
+
+def check_contact(point, coms, orientations):
+    for i,com in enumerate(coms):
+        new_cor_point = local_coordinates(point, com, orientations[i])
+        if all([abs(val)<=0.02 for val in new_cor_point]):
+            return com
+    return None
 
 if __name__ == "__main__":
     myBox = tableScenario()
@@ -177,6 +199,8 @@ if __name__ == "__main__":
     torque = np.random.randn(3)*0.00
     myBox.model.data.qfrc_applied = np.hstack([force, torque])
     for j in range(10000):
+        #print local_coordinates(np.random.randn(3), myBox.model.data.geom_xpos[1], myBox.model.data.xquat[1])
+        # print check_contact(f_direction, myBox.model.data.xpos, myBox.model.data.xquat)
         if j%500==0:
             f_direction = np.random.randn(3)
             force = 500*f_direction
