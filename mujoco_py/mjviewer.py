@@ -56,8 +56,13 @@ class MjViewer(object):
         self._last_mouse_x = 0
         self._last_mouse_y = 0
 
+
     def set_model(self, model):
         glfw.make_context_current(self.window)
+        # override
+        self.cam.elevation = -90.0
+        self.cam.azimuth = 90.33
+        self.cam.distance = 1.526
         self.model = model
         if model:
             self.data = model.data
@@ -69,8 +74,8 @@ class MjViewer(object):
             else:
                 mjlib.mjr_makeContext(None, byref(self.con), 150)
             self.render()
-        if model:
-            self.autoscale()
+        # if model:
+        #     self.autoscale()
 
     def autoscale(self):
         glfw.make_context_current(self.window)
@@ -282,6 +287,14 @@ class MjViewer(object):
         x, y = glfw.get_cursor_pos(window)
         self._last_mouse_x = int(self._scale * x)
         self._last_mouse_y = int(self._scale * y)
+
+        if self._button_middle_pressed:
+            # override
+            self.cam.elevation = -90.0
+            self.cam.azimuth = 90.33
+            self.cam.distance = 1.526
+
+            print 'mouse_click: ', self._last_mouse_x, self._last_mouse_y
 
         if not self.model:
             return

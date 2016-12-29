@@ -34,14 +34,14 @@ class tableScenario():
                                         init_width=self.width,
                                         init_height=self.height)
         # self.viewer.cam.trackbodyid = 0 #2
-        self.viewer.cam.distance = self.model.stat.extent * 0.75
-        self.viewer.cam.lookat[0] = 0  # 0.8
-        self.viewer.cam.lookat[1] = 0.5  # 0.8
-        self.viewer.cam.lookat[2] = 0.1  # 0.8
-        self.viewer.cam.elevation = 160
-        self.viewer.cam.azimuth = 100
+        self.viewer.cam.distance = 1.56
+        # self.viewer.cam.lookat[0] = 0  # 0.8
+        # self.viewer.cam.lookat[1] = 0.5  # 0.8
+        # self.viewer.cam.lookat[2] = 0.1  # 0.8
+        self.viewer.cam.elevation = -90.00
+        self.viewer.cam.azimuth = 90.33
         # self.viewer.cam.pose =
-        self.viewer.cam.camid = -3
+        # self.viewer.cam.camid = -3
         self.viewer.start()
         self.viewer.set_model(self.model)
         # (data, width, height) = self.viewer.get_image()
@@ -180,11 +180,26 @@ def local_coordinates(point, com, orientation):
     return np.reshape(np.dot(T_inv,point_n), (4,))[:-1]
 
 def check_contact(point, coms, orientations):
+    '''
+    Check the contact with the geoms
+    :param point:
+    :param coms: Center of mass of blocks
+    :param orientations: orientation of blocks in quaternions
+    :return: name of the block
+    '''
     for i,com in enumerate(coms):
         new_cor_point = local_coordinates(point, com, orientations[i])
         if all([abs(val)<=0.02 for val in new_cor_point]):
-            return com
+            return 'custom_object_{}'.format(i+1)
     return None
+
+def test_contact_force():
+    myBox = tableScenario()
+    myBox.viewerSetup()
+    myBox.viewer = myBox.viewerStart()
+    for i in np.arange(-0.6, 0.6, 0.01 ):
+        continue
+
 
 if __name__ == "__main__":
     myBox = tableScenario()
@@ -200,7 +215,10 @@ if __name__ == "__main__":
     myBox.model.data.qfrc_applied = np.hstack([force, torque])
     for j in range(10000):
         #print local_coordinates(np.random.randn(3), myBox.model.data.geom_xpos[1], myBox.model.data.xquat[1])
-        # print check_contact(f_direction, myBox.model.data.xpos, myBox.model.data.xquat)
+        # print myBox.model.data.geom_xpos, myBox.model.data.xquat
+        # f_direction = np.array([12.4000000e-01,   2.77555756e-17,   4.00000000e-02])
+        # print check_contact(f_direction, myBox.model.data.xpos[1:], myBox.model.data.xquat[1:])
+
         if j%500==0:
             f_direction = np.random.randn(3)
             force = 500*f_direction
