@@ -11,7 +11,23 @@ import six
 from math import *
 import random
 import transforms3d
+from PIL import Image, ImageDraw
+import time
+import psutil
 
+counter = 1
+def image(image, point):
+    global counter
+    data, width, height = image
+    x, y = point
+    print point
+    img = Image.new('RGB', (width, height))
+    img.frombytes(data)
+    draw = ImageDraw.Draw(img)
+    draw.ellipse((x, y, x+2, y+2), fill='blue', outline='blue')
+    draw.ellipse((191, 28, 197, 35), fill='red')
+    img.save('test/image-{}.png'.format(counter))
+    counter += 1
 
 model_folder_path = dirname(dirname(abspath(__file__))) + '/examples/models/'
 
@@ -197,15 +213,32 @@ def test_contact_force():
     myBox = tableScenario()
     myBox.viewerSetup()
     myBox.viewer = myBox.viewerStart()
-    for i in np.arange(-0.6, 0.6, 0.01 ):
-        continue
+    for x in np.arange(-0.6, 0.6, 0.04 ):
+        for y in np.arange(-0.6, 0.6, 0.04):
+            myBox.model.data.qfrc_applied = np.hstack([np.zeros(3), np.zeros(3)])
+            box = check_contact(np.array([x,y,0.03]), myBox.model.data.xpos[1:], myBox.model.data.xquat[1:])
+            image(myBox.viewer.get_image(), (1279 / 2.0 + 790 * x, 963 / 2.0 + 790 * y))
+            if box is not None:
+                print box, myBox.model.body_pose(box) if box is not None else None
+                com = myBox.model.body_pose(box)[0]
+                point =  np.array([x, y, 0.036])
+                f_direction = (com-point)/np.linalg.norm(com-point)
+                force = 500*f_direction
+                torque = np.random.rand(3)
+                myBox.model.data.qfrc_applied = myBox.model.applyFT(point, force, torque, 'custom_object_{}'.format(box.split("_")[-1]))
+            myBox.model.step()
+            myBox.viewerRender()
 
+    myBox.viewerEnd()
 
 if __name__ == "__main__":
+    test_contact_force()
+    exit()
     myBox = tableScenario()
     myBox.viewerSetup()
     saveData = False
     myBox.viewer = myBox.viewerStart()
+    #test_contact_force()
     #force_pos =  myBox.model.geom_pose('cBox_1')[0] + np.array([-0.04, 0.02, 0.02])
     #box_pos = myBox.model.data.xipos[1]
     #f_direction = (box_pos - force_pos)/np.linalg.norm(box_pos-force_pos)
