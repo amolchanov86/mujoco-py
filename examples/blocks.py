@@ -257,9 +257,9 @@ def test_contact_force2():
             if body_name is not None:
                 # print box, myBox.model.body_pose(box) if box is not None else None
                 com = myBox.model.body_pose(body_name)[0]
-                point =  np.array([x, y, 0.036])
-                point = com
-                f_direction = (com-point)/np.linalg.norm(com-point)
+                #point =  np.array([x, y, 0.036])
+                #point = com - np.array([0.1, 0, 0])
+                # f_direction = (com-point)/np.linalg.norm(com-point)
                 # f_direction = 500*np.random.rand(3)
                 f_direction = 500*np.array([0.,1.,0.])
 
@@ -270,7 +270,7 @@ def test_contact_force2():
                 # myBox.model.data.qfrc_applied = myBox.model.applyFT(point, force, torque, 'custom_object_{}'.format(box.split("_")[-1]))
                 # myBox.model.data.qfrc_applied = myBox.model.applyFT(point, force, torque,
                 #                                                     'custom_object_{}'.format(box.split("_")[-1]))
-                point = com
+                point = com - np.array([0.000, 0, 0])
                 myBox.model.applyFT(point, force, torque, body_name)
 
             myBox.model.step()
