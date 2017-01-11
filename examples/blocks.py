@@ -42,6 +42,7 @@ class tableScenario():
         # self.action_space = spaces.Box(self.lower, self.upper)
         self.metadata = {'render.modes': ['human', 'rgb_array'],
                          'video.frames_per_second': int(np.round(1.0 / self.dt))}
+        print 'Initialization finished ...'
 
     def viewerSetup(self):
         self.width = 640*2
@@ -210,6 +211,7 @@ def check_contact(point, coms, orientations):
     return None
 
 def test_contact_force():
+    print 'Contact test start ...'
     myBox = tableScenario()
     myBox.viewerSetup()
     myBox.viewer = myBox.viewerStart()
@@ -219,22 +221,70 @@ def test_contact_force():
             box = check_contact(np.array([x,y,0.03]), myBox.model.data.xpos[1:], myBox.model.data.xquat[1:])
             image(myBox.viewer.get_image(), (1279 / 2.0 + 790 * x, 963 / 2.0 + 790 * y))
             if box is not None:
-                print box, myBox.model.body_pose(box) if box is not None else None
+                # print box, myBox.model.body_pose(box) if box is not None else None
                 com = myBox.model.body_pose(box)[0]
                 point =  np.array([x, y, 0.036])
                 f_direction = (com-point)/np.linalg.norm(com-point)
+
+                print 'com = ', com
                 force = 500*f_direction
                 torque = np.random.rand(3)
-                myBox.model.data.qfrc_applied = myBox.model.applyFT(point, force, torque, 'custom_object_{}'.format(box.split("_")[-1]))
+                # myBox.model.data.qfrc_applied = myBox.model.applyFT(point, force, torque, 'custom_object_{}'.format(box.split("_")[-1]))
+                # myBox.model.data.qfrc_applied = myBox.model.applyFT(point, force, torque,
+                #                                                     'custom_object_{}'.format(box.split("_")[-1]))
+                point = com
+                body_name = 'custom_object_1'
+                mjcore.applyFT(point, force, torque, body_name)
             myBox.model.step()
             myBox.viewerRender()
 
     myBox.viewerEnd()
+    print 'Contact test end ...'
+
+def test_contact_force2():
+    print 'Contact test start ...'
+    myBox = tableScenario()
+    myBox.viewerSetup()
+    myBox.viewer = myBox.viewerStart()
+    for x in np.arange(-0.6, 0.6, 0.04 ):
+        for y in np.arange(-0.6, 0.6, 0.04):
+            myBox.model.data.qfrc_applied = np.hstack([np.zeros(3), np.zeros(3)])
+            # box = check_contact(np.array([x,y,0.03]), myBox.model.data.xpos[1:], myBox.model.data.xquat[1:])
+            body_name = 'custom_object_1'
+            body_adr = myBox.model.body_name2id(body_name)
+            print 'body addr = ', body_adr, ' addr_type = ', type(body_adr)
+            image(myBox.viewer.get_image(), (1279 / 2.0 + 790 * x, 963 / 2.0 + 790 * y))
+            if body_name is not None:
+                # print box, myBox.model.body_pose(box) if box is not None else None
+                com = myBox.model.body_pose(body_name)[0]
+                point =  np.array([x, y, 0.036])
+                point = com
+                f_direction = (com-point)/np.linalg.norm(com-point)
+                # f_direction = 500*np.random.rand(3)
+                f_direction = 500*np.array([0.,1.,0.])
+
+                force = f_direction
+                print 'com = ', com, ' direction = ', f_direction, ' force = ', force
+                torque = np.random.rand(3) * 0
+                # torque = np.ones([1,3])
+                # myBox.model.data.qfrc_applied = myBox.model.applyFT(point, force, torque, 'custom_object_{}'.format(box.split("_")[-1]))
+                # myBox.model.data.qfrc_applied = myBox.model.applyFT(point, force, torque,
+                #                                                     'custom_object_{}'.format(box.split("_")[-1]))
+                point = com
+                myBox.model.applyFT(point, force, torque, body_name)
+
+            myBox.model.step()
+            myBox.viewerRender()
+
+    myBox.viewerEnd()
+    print 'Contact test end ...'
+
+
 
 if __name__ == "__main__":
-    test_contact_force()
+    test_contact_force2()
     exit()
-    myBox = tableScenario()
+    myBox = tableScenario2()
     myBox.viewerSetup()
     saveData = False
     myBox.viewer = myBox.viewerStart()

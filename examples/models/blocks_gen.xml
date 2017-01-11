@@ -26,7 +26,7 @@
     <geom conaffinity="1" contype="1" material="MatGnd" name="tableWall_4" pos="0.0 -0.6 0.6" rgba=".6 .6 .5 1" size="0.9 0.9 0.01" type="box" zaxis="0 1 0"/>
     <geom conaffinity="1" contype="1" material="MatGnd" name="tableWall_5" pos="0 0 0.9" rgba=".6 .6 .5 1" size="0.6 0.6 0.01" type="box"/>
 
-    <body name="custom_object_1" pos="0.24 2.77555756156e-17 0.04">
+    <body name="custom_object_1" pos="0.1 2.77555756156e-17 0.04">
       <geom conaffinity="1" contype="1" material="MNIST_mat_1" name="cBox_1" rgba="1 0 0 1" size="0.04 0.04 0.04" type="box" user="1"/>
       <joint armature="0" damping="0" limited="false" name="cBox_joint_1" type="free" user="010"/>
     </body>

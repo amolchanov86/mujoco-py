@@ -286,16 +286,30 @@ class MjModel(MjModelWrapper):
 
 #apply cartesian force and torque (outside xfrc_applied mechanism)
     def applyFT(self, point, force, torque, body_name):
-        body_adr = self.body_name2id(body_name);
+        body_adr = self.body_name2id(body_name)
         assert(body_adr >= 0);
         qfrc_target = np.zeros((self.nv,1), dtype=np.double)
+        print 'nv=', self.nv, ' body_adr = ', body_adr
+        # mjlib.mj_applyFT(self.ptr,\
+        #                  self.data.ptr,\
+        #                  force.ctypes.data_as(POINTER(c_double)),\
+        #                  torque.ctypes.data_as(POINTER(c_double)),\
+        #                  point.ctypes.data_as(POINTER(c_double)),\
+        #                  body_adr,\
+        #                  # qfrc_target[(body_adr-1)*6].ctypes.data_as(POINTER(c_double)));
+        #                  qfrc_target[(body_adr - 1) * 6].ctypes.data_as(POINTER(c_double)))
         mjlib.mj_applyFT(self.ptr,\
                          self.data.ptr,\
                          force.ctypes.data_as(POINTER(c_double)),\
                          torque.ctypes.data_as(POINTER(c_double)),\
                          point.ctypes.data_as(POINTER(c_double)),\
                          body_adr,\
-                         qfrc_target[(body_adr-1)*6].ctypes.data_as(POINTER(c_double)));
+                         # qfrc_target[(body_adr-1)*6].ctypes.data_as(POINTER(c_double)));
+                         qfrc_target.ctypes.data_as(POINTER(c_double)))
+
+        # myBox.model.data.qfrc_applied = np.hstack([np.zeros(len(force)), np.zeros(len(torque))])
+        self.data.qfrc_applied = qfrc_target
+        print 'qfrc_target = ', qfrc_target
         return qfrc_target
 
     def joint_adr(self, joint_name):
