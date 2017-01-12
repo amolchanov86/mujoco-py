@@ -64,3 +64,4 @@ MANIFEST
 MUJOCO_LOG.TXT
 
 .idea
+*.orig

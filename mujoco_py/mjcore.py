@@ -309,7 +309,7 @@ class MjModel(MjModelWrapper):
 
         # myBox.model.data.qfrc_applied = np.hstack([np.zeros(len(force)), np.zeros(len(torque))])
         self.data.qfrc_applied = qfrc_target
-        print 'qfrc_target = ', qfrc_target
+        #print 'qfrc_target = ', qfrc_target
         return qfrc_target
 
     def joint_adr(self, joint_name):
