@@ -62,3 +62,9 @@ gcc-dylibs
 MANIFEST
 /tmp
 MUJOCO_LOG.TXT
+
+# Pycharm
+.idea
+
+# Temporary files
+*.orig
