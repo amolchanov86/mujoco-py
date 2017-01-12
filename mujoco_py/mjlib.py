@@ -18,11 +18,8 @@ else:
 if not os.path.exists(libfile):
     raise RuntimeError("Missing path: %s. (HINT: you should have unzipped the mjpro131.zip bundle without modification.)" % libfile)
 
-#mjjaclib = cdll.LoadLibrary(os.path.abspath("/home/mjm/gitlibs/mujoco-py/wrapper4Derivative/_jacMujoco.so"))
-#mjjaclib.cmptJac.argtypes=[POINTER(c_double),POINTER(c_double),POINTER(MJMODEL),POINTER(MJDATA)]
-#mjjaclib.cmptJac.restype = None
-
 mjlib = cdll.LoadLibrary(os.path.abspath(libfile))
+
 mjlib.mj_loadXML.argtypes = [String, String, c_char_p, c_int]
 mjlib.mj_loadXML.restype = POINTER(MJMODEL)
 mjlib.mj_saveXML.argtypes = [String, POINTER(MJMODEL), String]
@@ -153,18 +150,18 @@ mjlib.mj_deleteData.restype = None
 #mjlib.mj_mulJacVec.restype = None
 #mjlib.mj_mulJacTVec.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), POINTER(c_double), POINTER(c_double)]
 #mjlib.mj_mulJacTVec.restype = None
-mjlib.mj_jac.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), POINTER(c_double), POINTER(c_double), POINTER(c_double), c_int]
-mjlib.mj_jac.restype = None
-mjlib.mj_jacBody.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), POINTER(c_double), POINTER(c_double), c_int]
-mjlib.mj_jacBody.restype = None
-mjlib.mj_jacBodyCom.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), POINTER(c_double), POINTER(c_double), c_int]
-mjlib.mj_jacBodyCom.restype = None
-mjlib.mj_jacGeom.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), POINTER(c_double), POINTER(c_double), c_int]
-mjlib.mj_jacGeom.restype = None
-mjlib.mj_jacSite.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), POINTER(c_double), POINTER(c_double), c_int]
-mjlib.mj_jacSite.restype = None
-mjlib.mj_jacPointAxis.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), POINTER(c_double), POINTER(c_double), POINTER(c_double), POINTER(c_double), c_int]
-mjlib.mj_jacPointAxis.restype = None
+#mjlib.mj_jac.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), POINTER(c_double), POINTER(c_double), POINTER(c_double), c_int]
+#mjlib.mj_jac.restype = None
+#mjlib.mj_jacBody.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), POINTER(c_double), POINTER(c_double), c_int]
+#mjlib.mj_jacBody.restype = None
+#mjlib.mj_jacBodyCom.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), POINTER(c_double), POINTER(c_double), c_int]
+#mjlib.mj_jacBodyCom.restype = None
+#mjlib.mj_jacGeom.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), POINTER(c_double), POINTER(c_double), c_int]
+#mjlib.mj_jacGeom.restype = None
+#mjlib.mj_jacSite.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), POINTER(c_double), POINTER(c_double), c_int]
+#mjlib.mj_jacSite.restype = None
+#mjlib.mj_jacPointAxis.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), POINTER(c_double), POINTER(c_double), POINTER(c_double), POINTER(c_double), c_int]
+#mjlib.mj_jacPointAxis.restype = None
 mjlib.mj_name2id.argtypes = [POINTER(MJMODEL), c_int, String]  # The middle term is a mjtObj (an enum) in C.
 mjlib.mj_name2id.restype = c_int
 #mjlib.mj_id2name.argtypes = [POINTER(MJMODEL), mjtObj, c_int]
@@ -172,8 +169,8 @@ mjlib.mj_name2id.restype = c_int
 #mjlib.else:
 #mjlib.    mj_id2name.restype = String
 #mjlib.    mj_id2name.errcheck = ReturnString
-mjlib.mj_fullM.argtypes = [POINTER(MJMODEL), POINTER(c_double), POINTER(c_double)]
-mjlib.mj_fullM.restype = None
+#mjlib.mj_fullM.argtypes = [POINTER(MJMODEL), POINTER(c_double), POINTER(c_double)]
+#mjlib.mj_fullM.restype = None
 #mjlib.mj_mulM.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), POINTER(c_double), POINTER(c_double)]
 #mjlib.mj_mulM.restype = None
 mjlib.mj_applyFT.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), POINTER(c_double), POINTER(c_double), POINTER(c_double), c_int, POINTER(c_double)]
@@ -218,8 +215,8 @@ mjlib.mjv_moveCamera.argtypes = [c_int, c_float, c_float, POINTER(MJVCAMERA), c_
 mjlib.mjv_moveCamera.restype = None
 #mjlib.mjv_moveObject.argtypes = [mjtMouse, c_float, c_float, POINTER(MJVCAMERAPOSE), c_float, c_float, POINTER(c_double), POINTER(c_double)]
 #mjlib.mjv_moveObject.restype = None
-#mjlib.mjv_mousePerturb.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), c_int, c_int, POINTER(c_double), POINTER(c_double), POINTER(c_double)]
-#mjlib.mjv_mousePerturb.restype = None
+mjlib.mjv_mousePerturb.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), c_int, c_int, POINTER(c_double), POINTER(c_double), POINTER(c_double)]
+mjlib.mjv_mousePerturb.restype = None
 #mjlib.mjv_mouseEdit.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), c_int, c_int, POINTER(c_double), POINTER(c_double)]
 #mjlib.mjv_mouseEdit.restype = None
 mjlib.mjv_makeGeoms.argtypes = [POINTER(MJMODEL), POINTER(MJDATA), POINTER(MJVOBJECTS), POINTER(MJVOPTION), c_int, c_int, POINTER(c_double), POINTER(c_double), POINTER(c_double)]
@@ -314,8 +311,8 @@ mjlib.mjr_render.restype = None
 #mjlib.mju_cross.restype = None
 #mjlib.mju_zero.argtypes = [POINTER(c_double), c_int]
 #mjlib.mju_zero.restype = None
-mjlib.mju_copy.argtypes = [POINTER(c_double), POINTER(c_double), c_int]
-mjlib.mju_copy.restype = None
+#mjlib.mju_copy.argtypes = [POINTER(c_double), POINTER(c_double), c_int]
+#mjlib.mju_copy.restype = None
 #mjlib.mju_scl.argtypes = [POINTER(c_double), POINTER(c_double), c_double, c_int]
 #mjlib.mju_scl.restype = None
 #mjlib.mju_add.argtypes = [POINTER(c_double), POINTER(c_double), POINTER(c_double), c_int]

@@ -6,26 +6,18 @@ MOUSE_ZOOM = 5
 
 mjOBJ_BODY = 1
 mjOBJ_JOINT = 2
-mjOBJ_DOF = 3
-mjOBJ_GEOM = 4
-mjOBJ_SITE = 5
-mjOBJ_CAMERA = 6
-mjOBJ_LIGHT = 7
-mjOBJ_MESH = 8
-mjOBJ_HFIELD = 9
-mjOBJ_TEXTURE = 10
-mjOBJ_MATERIAL = 11
-mjOBJ_PAIR = 12
-mjOBJ_EXCLUDE = 13
-mjOBJ_EQUALITY = 14
-mjOBJ_TENDON = 15
-mjOBJ_ACTUATORv= 16
-mjOBJ_SENSORv = 17
-mjOBJ_NUMERIC = 18
-mjOBJ_TEXT = 19
-mjOBJ_KEY = 20
 
 mjJNT_FREE  = 0
 mjJNT_BALL  = 1
 mjJNT_SLIDE = 2
 mjJNT_HINGE = 3
+
+# mjtCatBit - geom categories
+mjCAT_STATIC = 1
+mjCAT_DYNAMIC = 2
+mjCAT_DECOR = 4
+mjCAT_ALL = 7
+
+# mjtPertBit - mouse perturbation
+mjPERT_TRANSLATE = 1
+mjPERT_ROTATE = 2

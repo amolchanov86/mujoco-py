@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<mujoco model="blocks">
+  <compiler angle="radian" inertiafromgeom="true" texturedir="texture/"/>
+  <size nuser_geom="1" nuser_jnt="1"/>
+  <option gravity="0 0 -9.8" iterations="20" timestep="0.001" viscosity="0"/>
+  <asset>
+    <material name="MatGnd" reflectance="0.0" rgba=".5 .55 .5 1" shininess=".2" specular=".3"/>
+    <texture fileup="/home/jmathai/scene_creator/mnist_png/training/2/5908.png" name="MNIST_tex_1" type="cube"/>
+    <material name="MNIST_mat_1" texture="MNIST_tex_1"/>
+    <texture fileright="/home/jmathai/scene_creator/mnist_png/training/5/30082.png" name="MNIST_tex_2" type="cube"/>
+    <material name="MNIST_mat_2" texture="MNIST_tex_2"/>
+    <texture fileright="/home/jmathai/scene_creator/mnist_png/training/9/29213.png" name="MNIST_tex_3" type="cube"/>
+    <material name="MNIST_mat_3" texture="MNIST_tex_3"/>
+    <texture fileback="/home/jmathai/scene_creator/mnist_png/training/2/48525.png" name="MNIST_tex_4" type="cube"/>
+    <material name="MNIST_mat_4" texture="MNIST_tex_4"/>
+    <texture fileup="/home/jmathai/scene_creator/mnist_png/testing/4/3437.png" name="MNIST_tex_5" type="cube"/>
+    <material name="MNIST_mat_5" texture="MNIST_tex_5"/>
+    <texture filefront="/home/jmathai/scene_creator/mnist_png/testing/6/7709.png" name="MNIST_tex_6" type="cube"/>
+    <material name="MNIST_mat_6" texture="MNIST_tex_6"/>
+  </asset>
+  <worldbody>
+    <light cutoff="40" diffuse=".4 .4 .4" dir="0 0 -1" directional="true" exponent="10" pos="0 0 1.5" specular=".7 .7 .7"/>
+    <geom conaffinity="1" contype="1" material="MatGnd" name="tableTop" pos="0 0 0" rgba=".6 .6 .5 1" size="0.6 0.6 0.01" type="box"/>
+    <geom conaffinity="1" contype="1" material="MatGnd" name="table_wall_1" pos="0.6 0.0 0.6" rgba=".6 .6 .5 1" size="0.6 0.6 0.01" type="box" zaxis="1 0 0"/>
+    <geom conaffinity="1" contype="1" material="MatGnd" name="table_wall_2" pos="-0.6 0.0 0.6" rgba=".6 .6 .5 1" size="0.6 0.6 0.01" type="box" zaxis="1 0 0"/>
+    <geom conaffinity="1" contype="1" material="MatGnd" name="table_wall_3" pos="0.0 0.6 0.6" rgba=".6 .6 .5 1" size="0.6 0.6 0.01" type="box" zaxis="0 1 0"/>
+    <geom conaffinity="1" contype="1" material="MatGnd" name="table_wall_4" pos="0.0 -0.6 0.6" rgba=".6 .6 .5 1" size="0.6 0.6 0.01" type="box" zaxis="0 1 0"/>
+    <geom conaffinity="1" contype="1" name="table_wall_5" pos="0.0 0.0 1.2" rgba=".6 .6 .5 1" size="0.6 0.6 0.01" type="box"/>
+    <body name="custom_object_1" pos="0.08 0.16 0.0">
+      <geom conaffinity="1" contype="1" material="MNIST_mat_1" name="cBox_1" rgba="1 0 0 1" size="0.04 0.04 0.04" type="box" user="1"/>
+      <joint armature="0" damping="0" limited="false" name="cBox_joint_1" type="free" user="010"/>
+    </body>
+    <body name="custom_object_2" pos="0.52 0.12 0.0">
+      <geom conaffinity="1" contype="1" material="MNIST_mat_2" name="cBox_2" rgba="1 0 0 1" size="0.04 0.04 0.04" type="box" user="1"/>
+      <joint armature="0" damping="0" limited="false" name="cBox_joint_2" type="free" user="010"/>
+    </body>
+    <body name="custom_object_3" pos="0.16 0.36 0.0">
+      <geom conaffinity="1" contype="1" material="MNIST_mat_3" name="cBox_3" rgba="1 0 0 1" size="0.04 0.04 0.04" type="box" user="1"/>
+      <joint armature="0" damping="0" limited="false" name="cBox_joint_3" type="free" user="010"/>
+    </body>
+    <body name="custom_object_4" pos="0.56 0.48 0.0">
+      <geom conaffinity="1" contype="1" material="MNIST_mat_4" name="cBox_4" rgba="1 0 0 1" size="0.04 0.04 0.04" type="box" user="1"/>
+      <joint armature="0" damping="0" limited="false" name="cBox_joint_4" type="free" user="010"/>
+    </body>
+    <body name="custom_object_5" pos="-0.16 0.28 0.0">
+      <geom conaffinity="1" contype="1" material="MNIST_mat_5" name="cBox_5" rgba="1 0 0 1" size="0.04 0.04 0.04" type="box" user="1"/>
+      <joint armature="0" damping="0" limited="false" name="cBox_joint_5" type="free" user="010"/>
+    </body>
+    <body name="custom_object_6" pos="-0.12 0.44 0.0">
+      <geom conaffinity="1" contype="1" material="MNIST_mat_6" name="cBox_6" rgba="1 0 0 1" size="0.04 0.04 0.04" type="box" user="1"/>
+      <joint armature="0" damping="0" limited="false" name="cBox_joint_6" type="free" user="010"/>
+    </body>
+  </worldbody>
+</mujoco>
