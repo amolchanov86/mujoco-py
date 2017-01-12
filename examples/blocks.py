@@ -250,7 +250,7 @@ def test_contact_force2():
         for y in np.arange(-0.6, 0.6, 0.04):
             myBox.model.data.qfrc_applied = np.hstack([np.zeros(3), np.zeros(3)])
             # box = check_contact(np.array([x,y,0.03]), myBox.model.data.xpos[1:], myBox.model.data.xquat[1:])
-            body_name = 'custom_object_1'
+            body_name = 'custom_object_3'
             body_adr = myBox.model.body_name2id(body_name)
             print 'body addr = ', body_adr, ' addr_type = ', type(body_adr)
             image(myBox.viewer.get_image(), (1279 / 2.0 + 790 * x, 963 / 2.0 + 790 * y))
@@ -270,7 +270,7 @@ def test_contact_force2():
                 # myBox.model.data.qfrc_applied = myBox.model.applyFT(point, force, torque, 'custom_object_{}'.format(box.split("_")[-1]))
                 # myBox.model.data.qfrc_applied = myBox.model.applyFT(point, force, torque,
                 #                                                     'custom_object_{}'.format(box.split("_")[-1]))
-                point = com - np.array([0.000, 0, 0])
+                point = com - np.array([0.001, 0, 0])
                 myBox.model.applyFT(point, force, torque, body_name)
 
             myBox.model.step()
