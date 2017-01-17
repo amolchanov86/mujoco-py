@@ -21,3 +21,9 @@ mjCAT_ALL = 7
 # mjtPertBit - mouse perturbation
 mjPERT_TRANSLATE = 1
 mjPERT_ROTATE = 2
+
+mjGEOM_ARROW = 100
+mjGEOM_NONE = 1001
+mjOBJ_UNKNOWN = 0
+mjCAT_DECOR = 4
+

@@ -332,3 +332,26 @@ class MjViewer(object):
         mjlib.mjr_freeContext(byref(self.con))
         mjlib.mjv_freeObjects(byref(self.objects))
         self.running = False
+
+    def v_defaultGeom():
+        g = mjcore.MJVGEOM()
+        g.type = mjGEOM_ARROW
+        g.dataid = -1
+        g.objtype = mjOBJ_UNKNOWN
+        g.objid = -1
+        g.category = mjCAT_DECOR
+        g.texid = -1
+        g.texuniform = 0
+        g.texrepeat[0] = 1
+        g.texrepeat[1] = 1
+        g.emission = 0
+        g.specular = 0.5
+        g.shininess = 0.5
+        g.reflectance = 0
+        g.label[0] = 0
+        g.size[0] = g.size[1] = 0.01
+        g.size[2] = 0.05
+        print 'test v_defaultGeom'
+        g.pos[0]=g.pos[1]=g.pos[2]=0.0
+        
+        
