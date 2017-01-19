@@ -3,7 +3,7 @@ from ctypes import pointer, byref
 import logging
 from threading import Lock
 import os
-
+import copy
 from . import mjcore, mjconstants, glfw
 from .mjlib import mjlib
 import numpy as np
@@ -96,14 +96,7 @@ class MjViewer(object):
         rect = self.get_rect()
         arr = (ctypes.c_double*3)(0, 0, 0)
 
-
         mjlib.mjv_makeGeoms(self.model.ptr, self.data.ptr, byref(self.objects), byref(self.vopt), mjCAT_ALL, 0, None, None, ctypes.cast(arr, ctypes.POINTER(ctypes.c_double)))
-
-        g = self.objects.geoms[self.objects.ngeom]
-        print g.type, g.objtype, g.pos[0],g.pos[1], g.pos[2]
-        self.v_defaultGeom(g)
-        self.objects.ngeom += 1
-
 
         mjlib.mjv_makeLights(self.model.ptr, self.data.ptr, byref(self.objects))
 
@@ -111,6 +104,39 @@ class MjViewer(object):
 
         mjlib.mjv_updateCameraPose(byref(self.cam), rect.width*1.0/rect.height)
 
+        self.objects.ngeom += 1
+
+        print 'box object params\n-----\ntype:{}\ndataid:{}\nobjtype:{}\nobjid:{}\ncategory:{}\npos:{}\ncolor:{}\nsize:{}\nlabel:{}\ntransparent:{}\n'.format(
+            self.objects.geoms[self.objects.ngeom-1].type,
+            self.objects.geoms[self.objects.ngeom - 1].dataid,
+            self.objects.geoms[self.objects.ngeom - 1].objtype,
+            self.objects.geoms[self.objects.ngeom - 1].objid,
+            self.objects.geoms[self.objects.ngeom - 1].category,
+            self.objects.geoms[self.objects.ngeom-1].pos[:3],
+            self.objects.geoms[self.objects.ngeom-1].rgba[:4],
+            self.objects.geoms[self.objects.ngeom-1].size[:],
+            self.objects.geoms[self.objects.ngeom-1].label[:],
+            self.objects.geoms[self.objects.ngeom - 1].transparent
+        )
+
+        g = self.objects.geoms[self.objects.ngeom-1]
+        self.v_defaultGeom(g)
+
+
+        print 'After object params\n-----\ntype:{}\ndataid:{}\nobjtype:{}\nobjid:{}\ncategory:{}\npos:{}\ncolor:{}\nsize:{}\nlabel:{}\ntransparent:{}\n'.format(
+            self.objects.geoms[self.objects.ngeom - 1].type,
+            self.objects.geoms[self.objects.ngeom - 1].dataid,
+            self.objects.geoms[self.objects.ngeom - 1].objtype,
+            self.objects.geoms[self.objects.ngeom - 1].objid,
+            self.objects.geoms[self.objects.ngeom - 1].category,
+            self.objects.geoms[self.objects.ngeom - 1].pos[:3],
+            self.objects.geoms[self.objects.ngeom - 1].rgba[:4],
+            self.objects.geoms[self.objects.ngeom - 1].size[:],
+            self.objects.geoms[self.objects.ngeom - 1].label[:],
+            self.objects.geoms[self.objects.ngeom - 1].transparent
+        )
+
+        print self.objects.ngeom
         mjlib.mjr_render(0, rect, byref(self.objects), byref(self.ropt), byref(self.cam.pose), byref(self.con))
 
         self.gui_lock.release()
@@ -178,9 +204,9 @@ class MjViewer(object):
         window = None
         if self.visible:
             glfw.window_hint(glfw.SAMPLES, 4)
-            glfw.window_hint(glfw.VISIBLE, 1);
+            glfw.window_hint(glfw.VISIBLE, 1)
         else:
-            glfw.window_hint(glfw.VISIBLE, 0);
+            glfw.window_hint(glfw.VISIBLE, 0)
 
         # try stereo if refresh rate is at least 100Hz
         stereo_available = False
@@ -341,27 +367,17 @@ class MjViewer(object):
         mjlib.mjv_freeObjects(byref(self.objects))
         self.running = False
 
-    def v_defaultGeom(self, g):
+    def v_defaultGeom(self, geom):
         #pass in a mjvGeom object
-        g.type = mjconstants.mjGEOM_ARROW
-        g.dataid = -1
-        g.objtype = mjconstants.mjOBJ_UNKNOWN
-        g.objid = -1
-        g.category = mjconstants.mjCAT_DECOR
-        g.texid = -1
-        g.texuniform = 0
-        g.texrepeat[0] = 1
-        g.texrepeat[1] = 1
-        g.emission = 0
-        g.specular = 0.5
-        g.shininess = 0.5
-        g.reflectance = 0
-        g.size[0] = g.size[1] = 0.09
-        g.size[2] = 0.09
-        g.rgba[0] = 1
-        g.rgba[1] = 0
-        g.rgba[2] = 0
-        g.rgba[3] = 1
-        g.pos[0]=g.pos[1]=g.pos[2]=0.05
-        
+        geom.type = mjconstants.mjGEOM_NONE
+        geom.dataid = -1
+        geom.objtype = mjconstants.mjOBJ_UNKNOWN
+        geom.objid = -1
+        geom.category = mjconstants.mjCAT_DECOR
+        geom.specular = 0.5
+        geom.shininess = 0.5
+        geom.rgba[2]=geom.rgba[3] = 1
+        geom.pos[0] = geom.pos[1] =  0.2
+        geom.pos[2] = 0.0
+        geom.size[0] = geom.size[1] = geom.size[2] = 0.5
         
