@@ -26,7 +26,6 @@ class dict2(dict):
 class MjModel(MjModelWrapper):
 
     def __init__(self, xml_path):
-        print 'openai mjmodel test...'
         buf = create_string_buffer(1000)
         model_ptr = mjlib.mj_loadXML(xml_path, None, buf, 1000)
         if len(buf.value) > 0:
