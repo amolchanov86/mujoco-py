@@ -104,41 +104,13 @@ class MjViewer(object):
 
         mjlib.mjv_updateCameraPose(byref(self.cam), rect.width*1.0/rect.height)
 
+
+        copyobj = copy.deepcopy(self.objects.geoms[self.objects.ngeom-1])
+        self.make_arrow_geom(copyobj, position=np.array([0., 0., 0.]), orientation=None)
+        self.objects.geoms[self.objects.ngeom] = copyobj
         self.objects.ngeom += 1
-
-        print 'box object params\n-----\ntype:{}\ndataid:{}\nobjtype:{}\nobjid:{}\ncategory:{}\npos:{}\ncolor:{}\nsize:{}\nlabel:{}\ntransparent:{}\n'.format(
-            self.objects.geoms[self.objects.ngeom-1].type,
-            self.objects.geoms[self.objects.ngeom - 1].dataid,
-            self.objects.geoms[self.objects.ngeom - 1].objtype,
-            self.objects.geoms[self.objects.ngeom - 1].objid,
-            self.objects.geoms[self.objects.ngeom - 1].category,
-            self.objects.geoms[self.objects.ngeom-1].pos[:3],
-            self.objects.geoms[self.objects.ngeom-1].rgba[:4],
-            self.objects.geoms[self.objects.ngeom-1].size[:],
-            self.objects.geoms[self.objects.ngeom-1].label[:],
-            self.objects.geoms[self.objects.ngeom - 1].transparent
-        )
-
-        g = self.objects.geoms[self.objects.ngeom-1]
-        self.v_defaultGeom(g)
-
-
-        print 'After object params\n-----\ntype:{}\ndataid:{}\nobjtype:{}\nobjid:{}\ncategory:{}\npos:{}\ncolor:{}\nsize:{}\nlabel:{}\ntransparent:{}\n'.format(
-            self.objects.geoms[self.objects.ngeom - 1].type,
-            self.objects.geoms[self.objects.ngeom - 1].dataid,
-            self.objects.geoms[self.objects.ngeom - 1].objtype,
-            self.objects.geoms[self.objects.ngeom - 1].objid,
-            self.objects.geoms[self.objects.ngeom - 1].category,
-            self.objects.geoms[self.objects.ngeom - 1].pos[:3],
-            self.objects.geoms[self.objects.ngeom - 1].rgba[:4],
-            self.objects.geoms[self.objects.ngeom - 1].size[:],
-            self.objects.geoms[self.objects.ngeom - 1].label[:],
-            self.objects.geoms[self.objects.ngeom - 1].transparent
-        )
-
-        print self.objects.ngeom
         mjlib.mjr_render(0, rect, byref(self.objects), byref(self.ropt), byref(self.cam.pose), byref(self.con))
-
+        self.objects.ngeom -=1
         self.gui_lock.release()
 
     def get_dimensions(self):
@@ -367,17 +339,18 @@ class MjViewer(object):
         mjlib.mjv_freeObjects(byref(self.objects))
         self.running = False
 
-    def v_defaultGeom(self, geom):
+    def make_arrow_geom(self, geom, position, orientation=None):
+        assert len(position) == 3
         #pass in a mjvGeom object
-        geom.type = mjconstants.mjGEOM_NONE
+        geom.type = mjconstants.mjGEOM_ARROW
         geom.dataid = -1
         geom.objtype = mjconstants.mjOBJ_UNKNOWN
         geom.objid = -1
         geom.category = mjconstants.mjCAT_DECOR
-        geom.specular = 0.5
-        geom.shininess = 0.5
-        geom.rgba[2]=geom.rgba[3] = 1
-        geom.pos[0] = geom.pos[1] =  0.2
-        geom.pos[2] = 0.0
-        geom.size[0] = geom.size[1] = geom.size[2] = 0.5
+        geom.rgba[0] = 0
+        geom.rgba[2] = 1
+        geom.pos[0], geom.pos[1], geom.pos[2] = position
+        geom.size[0] = 0.005
+        geom.size[1] = 0.005
+        geom.size[2] = 0.25
         
